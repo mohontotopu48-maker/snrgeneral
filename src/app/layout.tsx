@@ -15,33 +15,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "S New Roof | Orange County & LA County Roofing Experts",
-  description: "Top-rated roofing contractor in Santa Ana, Orange County & Los Angeles. S New Roof offers free roof inspections, emergency repairs, and new roof installations. Call 714-770-4756",
-  keywords: ["roofing", "roof repair", "Orange County", "Los Angeles", "Santa Ana", "S New Roof", "roof installation", "emergency roof repair", "roofing contractor"],
-  authors: [{ name: "S New Roof Inc." }],
+  title: "S NEW ROOF | Orange County & LA County Roofing Experts",
+  description: "Top-rated roofing contractor in Santa Ana, Orange County & Los Angeles. S NEW ROOF offers free roof inspections, emergency repairs, and new roof installations. Call 714-770-4756",
+  keywords: ["roofing", "roof repair", "Orange County", "Los Angeles", "Santa Ana", "S NEW ROOF", "roof installation", "emergency roof repair", "roofing contractor"],
+  authors: [{ name: "S NEW ROOF Inc." }],
   icons: {
-    icon: "https://i.ibb.co.com/JjCXRQw9/snr-linkedin-icon-26-sc-original-blue-1.jpg",
+    icon: "https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png",
   },
   openGraph: {
-    title: "S New Roof | Orange County & LA County Roofing Experts",
+    title: "S NEW ROOF | Orange County & LA County Roofing Experts",
     description: "Top-rated roofing contractor in Santa Ana, Orange County & Los Angeles. Free roof inspections, emergency repairs, and new roof installations.",
     url: "https://snewroof.com",
-    siteName: "S New Roof",
+    siteName: "S NEW ROOF",
     type: "website",
     images: [
       {
-        url: "https://i.ibb.co.com/JjCXRQw9/snr-linkedin-icon-26-sc-original-blue-1.jpg",
+        url: "https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png",
         width: 1200,
         height: 630,
-        alt: "S New Roof - Professional Roofing Services",
+        alt: "S NEW ROOF - Professional Roofing Services",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "S New Roof | Orange County & LA County Roofing Experts",
+    title: "S NEW ROOF | Orange County & LA County Roofing Experts",
     description: "Top-rated roofing contractor in Santa Ana, Orange County & Los Angeles.",
-    images: ["https://i.ibb.co.com/JjCXRQw9/snr-linkedin-icon-26-sc-original-blue-1.jpg"],
+    images: ["https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png"],
   },
 };
 
