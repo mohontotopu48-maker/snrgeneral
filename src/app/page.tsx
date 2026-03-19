@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Phone, Mail, MapPin, Calendar, MessageCircle, ChevronDown, 
@@ -9,17 +9,17 @@ import {
   ChevronUp, Zap, Heart, ThumbsUp, PhoneCall, Sparkles,
   Droplets, Wind, Sun, Snowflake, Leaf, Hammer, FileCheck,
   BadgeCheck, Timer, DollarSign, ThumbsUp as ThumbsUpIcon,
-  Send, Bot, MessageSquare, Loader2, XCircle, Minimize2,
+
   Layers, Factory, Settings, Lightbulb, Thermometer, CloudRain
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
+
 
 // New Logo URL
-const LOGO_URL = "https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png"
+const LOGO_URL = "https://i.ibb.co.com/JjSZ3fF8/Untitled-design-2.png"
 
 // Booking URL
 const BOOKING_URL = "https://api.leadconnectorhq.com/widget/bookings/free-roof-inspection-snewroof/"
@@ -84,8 +84,7 @@ const translations = {
     reviews: { title: 'What Our Clients Say', subtitle: 'Real Reviews from Happy Homeowners', googleRating: 'Google Rating', readMore: 'Read More Reviews' },
     cta: { title: 'Ready to Protect Your Home?', subtitle: 'Get a free inspection and estimate today', button: 'Schedule Your Free Consultation' },
     contact: { title: 'Get In Touch', subtitle: 'We\'re here to help with all your roofing needs', phone: 'Call Us', whatsapp: 'WhatsApp', email: 'Email Us', book: 'Book Online', scanQr: 'Scan for Quick Contact' },
-    footer: { rights: 'All rights reserved', tagline: 'Protecting Homes, Building Trust' },
-    chatbot: { title: 'Roofing Assistant', subtitle: 'Ask me anything about roofing!', placeholder: 'Type your message...', welcome: 'Hi! 👋 I\'m your roofing assistant. How can I help you today? You can ask me about our services, get a quote, or schedule an inspection!', thinking: 'Thinking...', error: 'Sorry, something went wrong. Please try again.' }
+    footer: { rights: 'All rights reserved', tagline: 'Protecting Homes, Building Trust' }
   },
   es: {
     nav: { home: 'Inicio', about: 'Nosotros', services: 'Servicios', contact: 'Contacto', booking: 'Reservar' },
@@ -119,8 +118,7 @@ const translations = {
     reviews: { title: 'Lo Que Dicen Nuestros Clientes', subtitle: 'Reseñas Reales de Clientes Satisfechos', googleRating: 'Calificación Google', readMore: 'Ver Más Reseñas' },
     cta: { title: '¿Listo para Proteger Su Hogar?', subtitle: 'Obtenga una inspección y presupuesto gratis hoy', button: 'Programe Su Consulta Gratuita' },
     contact: { title: 'Póngase en Contacto', subtitle: 'Estamos aquí para ayudar con todas sus necesidades de techado', phone: 'Llámanos', whatsapp: 'WhatsApp', email: 'Envíanos un Correo', book: 'Reservar en Línea', scanQr: 'Escanee para Contacto Rápido' },
-    footer: { rights: 'Todos los derechos reservados', tagline: 'Protegiendo Hogares, Construyendo Confianza' },
-    chatbot: { title: 'Asistente de Techos', subtitle: '¡Pregúntame sobre techos!', placeholder: 'Escribe tu mensaje...', welcome: '¡Hola! 👋 Soy tu asistente de techos. ¿Cómo puedo ayudarte hoy?', thinking: 'Pensando...', error: 'Lo siento, algo salió mal. Por favor intenta de nuevo.' }
+    footer: { rights: 'Todos los derechos reservados', tagline: 'Protegiendo Hogares, Construyendo Confianza' }
   }
 }
 
@@ -581,120 +579,6 @@ const reviews = [
   { id: 5, name: 'Brian Nguyen', rating: 5, text: 'Samuel and his team did an amazing job with my roof repair! Fantastic work replacing the damaged wood. Great price and top-quality workmanship.', services: [], highlight: null }
 ]
 
-// Chatbot Component
-function ChatBot({ lang }: { lang: 'en' | 'es' }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false)
-  const [messages, setMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const t = translations[lang].chatbot
-
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      setMessages([{ role: 'assistant', content: t.welcome }])
-    }
-  }, [isOpen, t.welcome])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return
-    const userMessage = input.trim()
-    setInput('')
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }])
-    setIsLoading(true)
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, history: messages.slice(-10) })
-      })
-      const data = await response.json()
-      setMessages(prev => [...prev, { role: 'assistant', content: data.response }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: t.error }])
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return (
-    <>
-      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2, type: "spring", stiffness: 200 }} className="fixed bottom-6 right-6 z-50">
-        <AnimatePresence>
-          {!isOpen && (
-            <motion.button initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0, rotate: 180 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setIsOpen(true)} className="relative group">
-              <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-amber-500" />
-              <div className="relative w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 shadow-2xl shadow-orange-500/40 flex items-center justify-center overflow-hidden">
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: "linear" }} className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
-                <img src={LOGO_URL} alt="Chat" className="w-10 h-10 rounded-full object-cover border-2 border-white/50" />
-              </div>
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5 }} className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center border-2 border-white">
-                <span className="text-white text-xs font-bold">1</span>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 3 }} className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap">
-                <div className="bg-slate-900 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-xl">{t.subtitle}<div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 border-8 border-transparent border-l-slate-900" /></div>
-              </motion.div>
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </motion.div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div initial={{ opacity: 0, y: 100, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 100, scale: 0.8 }} transition={{ type: "spring", stiffness: 300, damping: 30 }} className={`fixed z-50 ${isMinimized ? 'bottom-6 right-6' : 'bottom-6 right-6 sm:bottom-24 sm:right-6 w-[calc(100%-3rem)] sm:w-96'}`}>
-            {isMinimized ? (
-              <motion.button onClick={() => setIsMinimized(false)} className="flex items-center gap-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-3 rounded-2xl shadow-2xl shadow-orange-500/30">
-                <img src={LOGO_URL} alt="Bot" className="w-8 h-8 rounded-full object-cover border-2 border-white/50" />
-                <span className="font-medium">{t.title}</span>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              </motion.button>
-            ) : (
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
-                <div className="bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 p-4 text-white relative overflow-hidden">
-                  <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <motion.div animate={{ rotate: [0, 5, 0, -5, 0] }} transition={{ duration: 2, repeat: Infinity }}><img src={LOGO_URL} alt="Bot" className="w-12 h-12 rounded-full object-cover border-3 border-white/50 shadow-lg" /></motion.div>
-                      <div><h3 className="font-bold text-lg">{t.title}</h3><div className="flex items-center gap-1.5 text-white/90 text-sm"><div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /><span>Online</span></div></div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => setIsMinimized(true)} className="p-2 hover:bg-white/20 rounded-full transition-colors"><Minimize2 className="w-5 h-5" /></button>
-                      <button onClick={() => { setIsOpen(false); setMessages([]) }} className="p-2 hover:bg-white/20 rounded-full transition-colors"><X className="w-5 h-5" /></button>
-                    </div>
-                  </div>
-                </div>
-                <div className="h-80 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-slate-50 to-white">
-                  {messages.map((msg, index) => (
-                    <motion.div key={index} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                        {msg.role === 'assistant' && <img src={LOGO_URL} alt="Bot" className="w-8 h-8 rounded-full object-cover border-2 border-orange-200 flex-shrink-0" />}
-                        <div className={`p-3 rounded-2xl ${msg.role === 'user' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-br-md' : 'bg-white text-slate-700 border border-slate-200 rounded-bl-md shadow-sm'}`}><p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p></div>
-                      </div>
-                    </motion.div>
-                  ))}
-                  {isLoading && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2"><img src={LOGO_URL} alt="Bot" className="w-8 h-8 rounded-full object-cover border-2 border-orange-200" /><div className="bg-white border border-slate-200 rounded-2xl rounded-bl-md p-3 shadow-sm"><div className="flex items-center gap-1"><motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} className="w-2 h-2 bg-orange-400 rounded-full" /><motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} className="w-2 h-2 bg-orange-400 rounded-full" /><motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} className="w-2 h-2 bg-orange-400 rounded-full" /></div></div></motion.div>}
-                  <div ref={messagesEndRef} />
-                </div>
-                <div className="p-4 border-t border-slate-100 bg-white">
-                  <div className="flex items-center gap-2">
-                    <Input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendMessage()} placeholder={t.placeholder} className="flex-1 rounded-full border-slate-200 focus:border-orange-400 focus:ring-orange-400/20" disabled={isLoading} />
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={sendMessage} disabled={isLoading || !input.trim()} className="w-11 h-11 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/30 disabled:opacity-50"><Send className="w-5 h-5" /></motion.button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  )
-}
-
 export default function LandingPage() {
   const [lang, setLang] = useState<'en' | 'es'>('en')
   const [scrolled, setScrolled] = useState(false)
@@ -1084,10 +968,7 @@ export default function LandingPage() {
       </Dialog>
 
       {/* Scroll to Top */}
-      <AnimatePresence>{showScrollTop && (<motion.button initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={scrollToTop} className="fixed bottom-24 right-6 z-40 w-12 h-12 rounded-full bg-slate-900 text-white shadow-2xl flex items-center justify-center"><ChevronUp className="w-5 h-5" /></motion.button>)}</AnimatePresence>
-
-      {/* Chatbot */}
-      <ChatBot lang={lang} />
+      <AnimatePresence>{showScrollTop && (<motion.button initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0 }} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={scrollToTop} className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-slate-900 text-white shadow-2xl flex items-center justify-center"><ChevronUp className="w-5 h-5" /></motion.button>)}</AnimatePresence>
     </div>
   )
 }

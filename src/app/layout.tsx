@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   keywords: ["roofing", "roof repair", "Orange County", "Los Angeles", "Santa Ana", "S NEW ROOF", "roof installation", "emergency roof repair", "roofing contractor"],
   authors: [{ name: "S NEW ROOF Inc." }],
   icons: {
-    icon: "https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png",
+    icon: "https://i.ibb.co.com/JjSZ3fF8/Untitled-design-2.png",
   },
   openGraph: {
     title: "S NEW ROOF | Orange County & LA County Roofing Experts",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png",
+        url: "https://i.ibb.co.com/JjSZ3fF8/Untitled-design-2.png",
         width: 1200,
         height: 630,
         alt: "S NEW ROOF - Professional Roofing Services",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "S NEW ROOF | Orange County & LA County Roofing Experts",
     description: "Top-rated roofing contractor in Santa Ana, Orange County & Los Angeles.",
-    images: ["https://i.ibb.co.com/0RZwPVxK/Untitled-design-5.png"],
+    images: ["https://i.ibb.co.com/JjSZ3fF8/Untitled-design-2.png"],
   },
 };
 
